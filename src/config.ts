@@ -1,6 +1,7 @@
 import type {
 	ExpressiveCodeConfig,
 	LicenseConfig,
+	MusicPlayerConfig,
 	NavBarConfig,
 	ProfileConfig,
 	SiteConfig,
@@ -79,6 +80,11 @@ export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "CC BY-NC-SA 4.0",
 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+};
+
+export const musicPlayerConfig: MusicPlayerConfig = {
+	id: "18528691361", // 网易云歌单 ID
+	auto: false, // 进入页面是否自动播放（浏览器通常阻止自动播放，保持 false 即可）
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {

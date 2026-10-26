@@ -71,6 +71,11 @@ export type ProfileConfig = {
 	}[];
 };
 
+export type MusicPlayerConfig = {
+	id: string; // 网易云歌单 ID
+	auto?: boolean; // 是否自动播放（默认 false）
+};
+
 export type LicenseConfig = {
 	enable: boolean;
 	name: string;

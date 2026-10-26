@@ -1,0 +1,141 @@
+---
+// src/components/widget/MusicPlayer.astro
+// 网易云外链播放器：prev/play/pause/next + 可折叠播放列表
+//
+// 模板选择（来自网易云官方 JS，URL height 参数决定）：
+//   32  → player-sm    迷你条
+//   66  → player-mid   封面 + 播放/暂停（time 和按钮会重叠，已弃用）
+//   90  → player-bg    封面 + prev/play/pause/next（无列表）
+//   其他 → player-list  封面 + 完整控制 + 播放列表（初始即展开）
+//
+// 折叠实现：iframe 内部始终是 player-list 模板（高度 450 = 90 主体 + 340 列表 + 间距），
+// 外层卡片通过 max-height + overflow:hidden 把列表区域裁掉，点击展开按钮切换 max-height，
+// 下方 widget 由 flex gap-4 自动跟随。
+import { musicPlayerConfig } from "../../config";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+const className = Astro.props.class;
+const { style } = Astro.props;
+
+const { id, auto } = musicPlayerConfig;
+// height=450 触发 player-list 模板（不带列表的精确触发值是 90，450 是非 32/66/90 的任意值）
+const TEMPLATE_HEIGHT = 450;
+// 折叠时显示的高度：player-bg 部分（封面 90 + margin 10 + 时长行）
+const COLLAPSED_HEIGHT = 110;
+// 展开时 iframe 完整高度（与 URL 中 height 一致）
+const EXPANDED_HEIGHT = 450;
+const src = `https://music.163.com/outchain/player?type=0&id=${id}&auto=${auto ? 1 : 0}&height=${TEMPLATE_HEIGHT}`;
+---
+
+<music-player-widget
+    class:list={["card-base music-player-widget", className]}
+    style={style}
+>
+    <div class="player-frame">
+        <iframe
+            title="网易云音乐"
+            src={src}
+            width="100%"
+            height={EXPANDED_HEIGHT}
+            frameborder="0"
+            marginwidth="0"
+            marginheight="0"
+            loading="lazy"
+            class="music-iframe"
+        ></iframe>
+    </div>
+    <button type="button" class="playlist-toggle" aria-label="展开/收起播放列表">
+        <span class="toggle-text">展开播放列表</span>
+        <svg class="toggle-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</music-player-widget>
+
+<style define:vars={{ collapsedHeight: `${COLLAPSED_HEIGHT}px`, expandedHeight: `${EXPANDED_HEIGHT}px` }}>
+.music-player-widget {
+    display: block;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+/* 关键：通过 max-height 折叠；过渡动画让下方 widget 平滑跟随 */
+.player-frame {
+    max-height: var(--collapsedHeight);
+    overflow: hidden;
+    border-radius: 0.5rem;
+    transition: max-height 0.35s ease;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.music-player-widget.expanded .player-frame {
+    max-height: var(--expandedHeight);
+}
+
+.music-iframe {
+    display: block;
+    width: 100%;
+    /* 抵消网易云官方 #player{margin:10px 0 0 10px} 的内置边距，让播放器在卡片里居中 */
+    margin: -10px 0 0 -10px;
+    width: calc(100% + 10px);
+    border: 0;
+}
+
+/* 深色主题适配 */
+:global(.dark) .music-iframe {
+    filter: brightness(0.92) saturate(0.9);
+}
+
+.playlist-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 6px;
+    padding: 6px 0 2px;
+    border: none;
+    background: transparent;
+    color: var(--primary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.playlist-toggle:hover {
+    opacity: 0.75;
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.music-player-widget.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+</style>
+
+<script>
+// 项目使用 Swup 做客户端导航，事件绑定要兼容页面切换。
+// 用 document 级的事件委托 + data-bound 标记，避免每次 Swup 切换后监听器丢失或重复绑定。
+function bindMusicPlayerToggle() {
+    document.querySelectorAll("music-player-widget").forEach((widget) => {
+        if ((widget as HTMLElement).dataset.bound === "true") return;
+        (widget as HTMLElement).dataset.bound = "true";
+
+        const btn = widget.querySelector(".playlist-toggle");
+        const label = widget.querySelector(".toggle-text");
+        btn?.addEventListener("click", () => {
+            const expanded = widget.classList.toggle("expanded");
+            if (label) label.textContent = expanded ? "收起播放列表" : "展开播放列表";
+        });
+    });
+}
+
+bindMusicPlayerToggle();
+document.addEventListener("swup:contentReplaced", bindMusicPlayerToggle);
+document.addEventListener("astro:page-load", bindMusicPlayerToggle);
+</script>
