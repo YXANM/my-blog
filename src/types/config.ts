@@ -23,7 +23,17 @@ export type SiteConfig = {
 	banner: {
 		enable: boolean;
 		src: string;
-		position?: "top" | "center" | "bottom";
+		/**
+		 * 图片取景位置，直接作为 CSS `object-position` 使用。
+		 * 预设值：'top' | 'center' | 'bottom'
+		 * 也可填任意合法 CSS 值，例如：'50% 20%'、'left 30%'、'center 15%'
+		 */
+		position?: "top" | "center" | "bottom" | (string & {});
+		/**
+		 * 图片缩放倍数，默认 1（不缩放）。
+		 * 以 position 指定的焦点为中心缩放，例如 1.2 表示放大 20%。
+		 */
+		scale?: number;
 		credit: {
 			enable: boolean;
 			text: string;

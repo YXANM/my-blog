@@ -18,8 +18,9 @@ export const siteConfig: SiteConfig = {
 	},
 	banner: {
 		enable: true,
-		src: "assets/images/demo-banner.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+		src: "assets/images/banner.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+		position: "top", // Banner 取景位置：'top' | 'center' | 'bottom'，或任意 CSS object-position，如 '50% 20%'、'left 30%'
+		scale: 1, // Banner 缩放倍数，以 position 焦点为中心缩放，如 1.2 表示放大 20%
 		credit: {
 			enable: false, // Display the credit text of the banner image
 			text: "", // Credit text to be displayed

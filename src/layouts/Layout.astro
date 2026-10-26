@@ -63,13 +63,15 @@ if (!lang) {
 }
 const siteLang = lang.replace("_", "-");
 
-const bannerOffsetByPosition = {
+const bannerOffsetByPosition: Record<string, string> = {
 	top: `${BANNER_HEIGHT_EXTEND}vh`,
 	center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
 	bottom: "0",
 };
+// position 支持自定义 CSS 值，不在预设表里时回退到 center，避免 CSS 变量变成 undefined
 const bannerOffset =
-	bannerOffsetByPosition[siteConfig.banner.position || "center"];
+	bannerOffsetByPosition[siteConfig.banner.position || "center"] ??
+	bannerOffsetByPosition.center;
 ---
 
 <!DOCTYPE html>

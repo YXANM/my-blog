@@ -7,13 +7,21 @@ interface Props {
 	class?: string;
 	alt?: string;
 	position?: string;
+	scale?: number;
 	basePath?: string;
 }
 
 import { Image } from "astro:assets";
 import { url } from "../../utils/url-utils";
 
-const { id, src, alt, position = "center", basePath = "/" } = Astro.props;
+const {
+	id,
+	src,
+	alt,
+	position = "center",
+	scale = 1,
+	basePath = "/",
+} = Astro.props;
 const className = Astro.props.class;
 
 const isLocal = !(
@@ -45,7 +53,8 @@ if (isLocal) {
 }
 
 const imageClass = "w-full h-full object-cover";
-const imageStyle = `object-position: ${position}`;
+// transform-origin 跟随 object-position，缩放围绕取景焦点进行
+const imageStyle = `object-position: ${position}; transform: scale(${scale}); transform-origin: ${position};`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative']}>
     <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
