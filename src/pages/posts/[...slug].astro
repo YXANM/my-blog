@@ -13,6 +13,7 @@ import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+import PasswordProtection from "@components/misc/PasswordProtection.astro";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -26,6 +27,11 @@ const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
 
 const { remarkPluginFrontmatter } = await entry.render();
+
+const encrypted = entry.data.encrypted;
+// body 需先经过 encrypt-posts.js 加密才会有密文；dev 模式没加密时回退为明文
+const isBodyEncrypted = encrypted && entry.body.includes("<!-- ENCRYPTED -->");
+const ciphertext = isBodyEncrypted ? entry.body.replace(/^<!-- ENCRYPTED -->\s*/, "") : "";
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -102,9 +108,18 @@ const jsonLd = {
             }
 
 
-            <Markdown class="mb-6 markdown-content onload-animation">
-                <Content />
-            </Markdown>
+            <div class="mb-6 markdown-content onload-animation">
+                {isBodyEncrypted ? (
+                    <PasswordProtection
+                        ciphertext={ciphertext}
+                        slug={entry.slug}
+                    />
+                ) : (
+                    <Markdown>
+                        <Content />
+                    </Markdown>
+                )}
+            </div>
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 

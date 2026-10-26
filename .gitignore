@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# 私密文章源码（明文，绝不入库；构建时加密后输出到 src/content/posts）
+src/content/private-src/
+
 # macOS-specific files
 .DS_Store
 
