@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "game.md",
+                "file": "draft.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "game"
+              "title": "draft"
             }
           }
         ]
@@ -185,6 +185,13 @@
   },
   "active": "9b719a47024c2e27",
   "lastOpenFiles": [
+    "expressive-code.md",
+    "game.md",
+    "markdown.md",
+    "markdown-extended.md",
+    "video.md",
+    "deepseek harness （预览版）的安装和使用/index.md",
+    "deepseek harness （预览版）的安装和使用/cover.jpg",
     "draft.md",
     "第一篇博客.md"
   ]
