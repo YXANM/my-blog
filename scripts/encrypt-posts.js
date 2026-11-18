@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { webcrypto } from 'node:crypto';
 import MarkdownIt from 'markdown-it';
 import taskLists from 'markdown-it-task-lists';
+import getReadingTime from 'reading-time';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SRC_DIR = path.join(__dirname, '../src/content/private-src');
@@ -91,6 +92,17 @@ function stripPassword(frontmatter) {
   return frontmatter.replace(/^password:.*\n?/gm, '').trimEnd();
 }
 
+/**
+ * 写入/覆盖 stats 字段：构建时正文已是密文，remark 统计不到真实字数，
+ * 因此把明文的字数与阅读时长提前算好存进 frontmatter
+ */
+function setStat(frontmatter, key, value) {
+  const re = new RegExp(`^${key}:.*$`, 'm');
+  return re.test(frontmatter)
+    ? frontmatter.replace(re, `${key}: ${value}`)
+    : `${frontmatter}\n${key}: ${value}`;
+}
+
 async function main() {
   // private-src 不存在 → CI / 新设备场景，保留 posts 里已提交的密文
   if (!fs.existsSync(SRC_DIR)) {
@@ -128,8 +140,15 @@ async function main() {
     const html = md.render(body);
     const encryptedBase64 = await encryptText(html, password);
 
-    // 输出用 frontmatter：带 encrypted: true，但剔除 password
-    const outputFrontmatter = stripPassword(ensureEncryptedFlag(frontmatter));
+    // 用明文统计字数与阅读时长（与 remark-reading-time 的算法一致）
+    const readingTime = getReadingTime(html.replace(/<[^>]+>/g, ' '));
+    const words = readingTime.words;
+    const minutes = Math.max(1, Math.round(readingTime.minutes));
+
+    // 输出用 frontmatter：带 encrypted: true，剔除 password，补上统计值
+    let outputFrontmatter = stripPassword(ensureEncryptedFlag(frontmatter));
+    outputFrontmatter = setStat(outputFrontmatter, 'words', words);
+    outputFrontmatter = setStat(outputFrontmatter, 'minutes', minutes);
     const output = `---\n${outputFrontmatter}\n---\n\n<!-- ENCRYPTED -->\n${encryptedBase64}\n`;
     fs.writeFileSync(path.join(OUT_DIR, file), output, 'utf-8');
     console.log(`🔒 已加密: private-src/${file} → posts/${file}`);

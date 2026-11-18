@@ -33,6 +33,10 @@ const encrypted = entry.data.encrypted;
 const isBodyEncrypted = encrypted && entry.body.includes("<!-- ENCRYPTED -->");
 const ciphertext = isBodyEncrypted ? entry.body.replace(/^<!-- ENCRYPTED -->\s*/, "") : "";
 
+// 加密文章的字数/时长由 encrypt-posts.js 按明文算出并写进 frontmatter
+const words = entry.data.words ?? remarkPluginFrontmatter.words;
+const minutes = entry.data.minutes ?? remarkPluginFrontmatter.minutes;
+
 const jsonLd = {
 	"@context": "https://schema.org",
 	"@type": "BlogPosting",
@@ -63,14 +67,14 @@ const jsonLd = {
                     <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
                         <Icon name="material-symbols:notes-rounded"></Icon>
                     </div>
-                    <div class="text-sm">{remarkPluginFrontmatter.words} {" " + i18n(I18nKey.wordsCount)}</div>
+                    <div class="text-sm">{words} {" " + i18n(I18nKey.wordsCount)}</div>
                 </div>
                 <div class="flex flex-row items-center">
                     <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
                         <Icon name="material-symbols:schedule-outline-rounded"></Icon>
                     </div>
                     <div class="text-sm">
-                        {remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
+                        {minutes} {" " + i18n(minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
                     </div>
                 </div>
             </div>
