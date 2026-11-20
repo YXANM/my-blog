@@ -59,6 +59,11 @@ export const profileConfig: ProfileConfig = {
 	name: "云兮安梦",
 	bio: "我的博客我做主，笔随心意云中舞。",
 	links: [
+        {
+			name: "哔哩哔哩",
+			icon: "simple-icons:bilibili",
+			url: "https://space.bilibili.com/1657901610",
+		},
 		{
 			name: "网易云音乐",
 			icon: "simple-icons:neteasecloudmusic",
