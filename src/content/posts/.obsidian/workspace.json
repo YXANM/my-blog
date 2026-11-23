@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "markdown-extended.md",
+                "file": "第一篇博客.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "markdown-extended"
+              "title": "第一篇博客"
             }
           }
         ]
@@ -185,21 +185,25 @@
   },
   "active": "885f748da91f7720",
   "lastOpenFiles": [
+    "动态 demo.md",
+    "第一篇博客.md",
+    "my-blog/about.md",
+    "my-blog",
+    "draft.md",
+    "别偷看.md",
+    "Pasted image 20261123195604.png",
+    "template/template.md",
+    "template/template demo.md",
+    "deepseek harness （预览版）的安装和使用/index.md",
+    "deepseek harness （预览版）的安装和使用/cover.jpg",
+    "markdown-extended.md",
     "expressive-code.md",
     "markdown.md",
     "guide/index.md",
-    "deepseek harness （预览版）的安装和使用/index.md",
-    "template/template1.md",
-    "第一篇博客.md",
-    "别偷看.md",
-    "未命名.md",
     "2026-07-31.md",
     "video.md",
-    "markdown-extended.md",
     "game.md",
     "template",
-    "我的黑历史？.md",
-    "deepseek harness （预览版）的安装和使用/cover.jpg",
-    "draft.md"
+    "我的黑历史？.md"
   ]
 }

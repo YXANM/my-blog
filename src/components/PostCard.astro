@@ -54,6 +54,12 @@ const minutes = entry.data.minutes ?? remarkPluginFrontmatter.minutes;
         before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
         before:absolute before:top-[35px] before:left-[18px] before:hidden md:before:block
         ">
+            {entry.data.pin && (
+                <span class="inline-flex items-center gap-1.5 align-middle -translate-y-[2px] mr-2 px-1 py-[1px] rounded-lg text-[13px] font-bold text-white" style="background-color: var(--primary);">
+                    <Icon name="material-symbols:keep" class="text-[16px]"></Icon>
+                    置顶
+                </span>
+            )}
             {title}
             <Icon class="inline text-[2rem] text-[var(--primary)] md:hidden translate-y-0.5 absolute" name="material-symbols:chevron-right-rounded" ></Icon>
             <Icon class="text-[var(--primary)] text-[2rem] transition hidden md:inline absolute translate-y-0.5 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0" name="material-symbols:chevron-right-rounded"></Icon>

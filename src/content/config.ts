@@ -13,6 +13,7 @@ const postsCollection = defineCollection({
 		lang: z.string().optional().default(""),
 		encrypted: z.boolean().optional().default(false), // 标记是否加密
 		password: z.string().optional(),                  // 解密密码（可选，也可用环境变量）
+		pin: z.boolean().optional().default(false),       // 置顶：置顶文章在列表中永远排在最前
 		words: z.number().optional(),                     // 加密文章的字数（构建时正文是密文，由加密脚本写入）
 		minutes: z.number().optional(),                   // 加密文章的阅读时长（同上）
 

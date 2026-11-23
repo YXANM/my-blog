@@ -1,5 +1,5 @@
 ---
-title: template
+title: template demo
 published: 2026-11-20
 description: ""
 tags: []

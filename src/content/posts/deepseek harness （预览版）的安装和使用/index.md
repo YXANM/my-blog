@@ -61,7 +61,7 @@ draft: false
 
 直接让AI帮我安装插件。
 
-```MARKDOWN
+```markdown
 装一下dsh-market这个插件，并告诉我如何使用
 ```
 

@@ -10,6 +10,11 @@ async function getRawSortedPosts() {
 	});
 
 	const sorted = allBlogPosts.sort((a, b) => {
+		// 主键：置顶优先（pin 为 true 的永远排在前面，不被新文章挤下去）
+		const pinA = a.data.pin ? 1 : 0;
+		const pinB = b.data.pin ? 1 : 0;
+		if (pinA !== pinB) return pinB - pinA;
+		// 次键：同组内按发布日期倒序
 		const dateA = new Date(a.data.published);
 		const dateB = new Date(b.data.published);
 		return dateA > dateB ? -1 : 1;
